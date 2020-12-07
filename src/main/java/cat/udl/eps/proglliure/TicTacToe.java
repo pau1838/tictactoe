@@ -1,3 +1,5 @@
+package cat.udl.eps.proglliure;
+
 import org.apache.commons.lang3.math.NumberUtils;
 
 import java.io.BufferedReader;
