@@ -1,12 +1,16 @@
-import java.util.*;
-import java.io.*;
+import org.apache.commons.lang3.math.NumberUtils;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.Scanner;
 
 public class tictactoe
 {
 	static char game [][];
 	static int chance_counter,winner;
 	static Scanner sc = new Scanner(System.in);
-	
+
 	public static final String ANSI_RESET = "\u001B[0m";
 	public static final String ANSI_BLACK = "\u001B[30m";
 	public static final String ANSI_RED = "\u001B[31m";
@@ -16,7 +20,7 @@ public class tictactoe
 	public static final String ANSI_PURPLE = "\u001B[35m";
 	public static final String ANSI_CYAN = "\u001B[36m";
 	public static final String ANSI_WHITE = "\u001B[37m";
-	
+
 	tictactoe()
 	{
 		game=new char[3][3];
@@ -26,7 +30,7 @@ public class tictactoe
 		chance_counter=0;
 		winner=0;
 	}
-	
+
 	private static void printGame()
 	{
 		System.out.print(String.format("\033[H\033[2J"));
@@ -51,16 +55,16 @@ public class tictactoe
 						System.out.print(ANSI_GREEN+game[i][j]+ANSI_RESET);
 				}
 			}
-			System.out.println();	
+			System.out.println();
 			if(i!=2)
 			{
 				System.out.print("\t\t\t\t");
 				System.out.println("______");
 			}
 		}
-		System.out.println("\n\n\t"+ANSI_YELLOW+"Enter Position Eg- 1 2 (For 1st Row, 2nd Column)"+ANSI_RESET);	
+		System.out.println("\n\n\t"+ANSI_YELLOW+"Enter Position Eg- 1 2 (For 1st Row, 2nd Column)"+ANSI_RESET);
 	}
-	
+
 	private static void instructions()
 	{
 		System.out.print(String.format("\033[H\033[2J"));
@@ -68,20 +72,21 @@ public class tictactoe
 		System.out.println("\t\t| |_ _  ___| |_ __ _  ___| |_ ___   ___ ");
 		System.out.println("\t\t| __| |/ __| __/ _` |/ __| __/ _ \\ / _\\");
 		System.out.println("\t\t| |_| | (__| || (_| | (__| || (_) |  __/");
- 		System.out.println("\t\t\\__ |_|\\___|\\__\\__,_|\\___|\\__\\___/ \\___|\n\n");
-                                        
+		System.out.println("\t\t\\__ |_|\\___|\\__\\__,_|\\___|\\__\\___/ \\___|\n\n");
+
 		System.out.println("Welcome to TIC TAC TOE Game");
 		System.out.println("It is a 2 player game.");
 		System.out.println("The first player is known as X and the second is O.");
 		System.out.println("Players play Xs and Os on the game board until all nine squares are filled.");
 		System.out.println("Or anyone wins before it.\n"+ANSI_RESET);
-		
+
 	}
-	
+
 	private static void play()throws IOException
 	{
 		BufferedReader br=new BufferedReader(new InputStreamReader(System.in));
 		int player=1;
+		boolean isValid = false;
 		String input;
 		chance_counter=0;
 		System.out.print(ANSI_PURPLE+"\tEnter name of Player 1:\t"+ANSI_RESET);
@@ -95,41 +100,35 @@ public class tictactoe
 			tempPlayer=tempPlayer.toUpperCase();
 			System.out.println("\n\n\t"+tempPlayer);
 			System.out.print(ANSI_CYAN+"\tINPUT:\t"+ANSI_RESET);
-			input=br.readLine();
-			int x=Integer.parseInt(input.substring(0,input.indexOf(' ')));
-			int y=Integer.parseInt(input.substring(input.indexOf(' ')+1));
-			if(checkValidity(x,y))
-			{
-				game[x-1][y-1]=(player==1)?'X':'O';
-				if(winnerCheck())
-				{
-					printGame();
-					System.out.println("\n\n\t\t"+tempPlayer+" Wins");
-					System.exit(0);
-				}
-				player=(player==1)?2:1;
-				chance_counter++;
-			}
-			else
-			{
-				System.out.println("\tInvalid Position.\n\tPosition Doesn't Exist or is Already Occupied.");
-				System.out.print(ANSI_CYAN+"\tINPUT:\t"+ANSI_RESET);
+			isValid = false;
+			do {
 				input=br.readLine();
-				x=Integer.parseInt(input.substring(0,1));
-				y=Integer.parseInt(input.substring(2));
-				if(checkValidity(x,y))
-				{
-					game[x-1][y-1]=(player==1)?'X':'O';
-					chance_counter++;
-					if(winnerCheck())
-					{
-						printGame();
-						System.out.println("\n\n\t\t"+tempPlayer+" Wins");
-						System.exit(0);
+				if (formatValid(input)) {
+					int x=Integer.parseInt(input.substring(0,input.indexOf(' ')).trim());
+					int y=Integer.parseInt(input.substring(input.indexOf(' ')+1).trim());
+
+					if (checkValidity(x, y)) {
+						game[x-1][y-1]=(player==1)?'X':'O';
+						if(winnerCheck())
+						{
+							printGame();
+							System.out.println("\n\n\t\t"+tempPlayer+" Wins");
+							System.exit(0);
+						}
+						player=(player==1)?2:1;
+						chance_counter++;
+						isValid = true;
+					} else {
+						System.out.println("\tInvalid Position.\n\tPosition Doesn't Exist or is Already Occupied.");
+						System.out.println("\n\t"+ANSI_YELLOW+"Enter Position Eg- 1 2 (For 1st Row, 2nd Column)"+ANSI_RESET);
+						System.out.print(ANSI_CYAN+"\tINPUT:\t"+ANSI_RESET);
 					}
-					player=(player==1)?2:1;
+				} else {
+					System.out.print(ANSI_RED+"\tInput format is not valid.\n\t");
+					System.out.println("\n\t"+ANSI_YELLOW+"Enter Position Eg- 1 2 (For 1st Row, 2nd Column)"+ANSI_RESET);
+					System.out.print(ANSI_CYAN+"\tINPUT:\t"+ANSI_RESET);
 				}
-			}
+			} while (!isValid);
 		}
 		if(chance_counter==9)
 		{
@@ -137,7 +136,16 @@ public class tictactoe
 			System.out.println("\n\n\tGAME IS DRAW!!!");
 		}
 	}
-				
+
+	private static boolean formatValid(String input) {
+		String[] result = input.split("\\s+");
+		if (result.length != 2) {
+			return false;
+		} else {
+			return NumberUtils.isCreatable(result[0]) && NumberUtils.isCreatable(result[1]);
+		}
+	}
+
 	private static boolean checkValidity(int i,int j)
 	{
 		boolean validity=false;
@@ -145,7 +153,7 @@ public class tictactoe
 			validity=true;
 		return validity;
 	}
-	
+
 	private static boolean rowCheck()
 	{
 		boolean status=false;
@@ -157,7 +165,7 @@ public class tictactoe
 			status=true;
 		return status;
 	}
-	
+
 	private static boolean columnCheck()
 	{
 		boolean status=false;
@@ -169,7 +177,7 @@ public class tictactoe
 			status=true;
 		return status;
 	}
-					
+
 	private static boolean diagonalCheck()
 	{
 		boolean status=false;
@@ -179,20 +187,20 @@ public class tictactoe
 			status=true;
 		return status;
 	}
-	
+
 	private static boolean winnerCheck()
 	{
 		boolean status=false;
 		if(rowCheck() || columnCheck() || diagonalCheck())
 			status=true;
-		return status;	
+		return status;
 	}
-	
+
 	public static void main(String args[])throws IOException
 	{
 		tictactoe obj=new tictactoe();
 		obj.instructions();
 		obj.play();
 	}
-	
+
 }
