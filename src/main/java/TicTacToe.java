@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Scanner;
 
-public class tictactoe
+public class TicTacToe
 {
 	static char game [][];
 	static int chance_counter,winner;
@@ -21,7 +21,7 @@ public class tictactoe
 	public static final String ANSI_CYAN = "\u001B[36m";
 	public static final String ANSI_WHITE = "\u001B[37m";
 
-	tictactoe()
+	TicTacToe()
 	{
 		game=new char[3][3];
 		for(int i=0;i<3;i++)
@@ -198,7 +198,7 @@ public class tictactoe
 
 	public static void main(String args[])throws IOException
 	{
-		tictactoe obj=new tictactoe();
+		TicTacToe obj=new TicTacToe();
 		obj.instructions();
 		obj.play();
 	}
