@@ -5,6 +5,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ResourceBundle;
 import java.util.Scanner;
 
 public class TicTacToe
@@ -12,6 +13,7 @@ public class TicTacToe
 	static char game [][];
 	static int chance_counter,winner;
 	static Scanner sc = new Scanner(System.in);
+	static ResourceBundle i18n = ResourceBundle.getBundle("translations");
 
 	public static final String ANSI_RESET = "\u001B[0m";
 	public static final String ANSI_BLACK = "\u001B[30m";
@@ -36,7 +38,7 @@ public class TicTacToe
 	private static void printGame()
 	{
 		System.out.print(String.format("\033[H\033[2J"));
-		System.out.println(ANSI_GREEN+"\n\n\t\t\tCurrent Game Status:"+ANSI_RESET+"\n\n");
+		System.out.println(ANSI_GREEN+"\n\n\t\t\t"+i18n.getString("GAME_STATUS_MSG")+ANSI_RESET+"\n\n");
 		for(int i=0;i<3;i++)
 		{
 			System.out.print("\t\t\t\t");
@@ -64,7 +66,7 @@ public class TicTacToe
 				System.out.println("______");
 			}
 		}
-		System.out.println("\n\n\t"+ANSI_YELLOW+"Enter Position Eg- 1 2 (For 1st Row, 2nd Column)"+ANSI_RESET);
+		System.out.println("\n\n\t"+ANSI_YELLOW+i18n.getString("ENTER_POSITION")+ANSI_RESET);
 	}
 
 	private static void instructions()
@@ -76,11 +78,11 @@ public class TicTacToe
 		System.out.println("\t\t| |_| | (__| || (_| | (__| || (_) |  __/");
 		System.out.println("\t\t\\__ |_|\\___|\\__\\__,_|\\___|\\__\\___/ \\___|\n\n");
 
-		System.out.println("Welcome to TIC TAC TOE Game");
-		System.out.println("It is a 2 player game.");
-		System.out.println("The first player is known as X and the second is O.");
-		System.out.println("Players play Xs and Os on the game board until all nine squares are filled.");
-		System.out.println("Or anyone wins before it.\n"+ANSI_RESET);
+		System.out.println(i18n.getString("WELCOME"));
+		System.out.println(i18n.getString("PLAYERS"));
+		System.out.println(i18n.getString("PLAYERS_X_O"));
+		System.out.println(i18n.getString("INSTRUCTIONS1"));
+		System.out.println(i18n.getString("INSTRUCTIONS2")+"\n"+ANSI_RESET);
 
 	}
 
@@ -91,9 +93,9 @@ public class TicTacToe
 		boolean isValid = false;
 		String input;
 		chance_counter=0;
-		System.out.print(ANSI_PURPLE+"\tEnter name of Player 1:\t"+ANSI_RESET);
+		System.out.print(ANSI_PURPLE+"\t"+i18n.getString("ENTER_P1")+"\t"+ANSI_RESET);
 		String name1=br.readLine();
-		System.out.print(ANSI_PURPLE+"\tEnter name of Player 2:\t"+ANSI_RESET);
+		System.out.print(ANSI_PURPLE+"\t"+i18n.getString("ENTER_P2")+"\t"+ANSI_RESET);
 		String name2=br.readLine();
 		while(chance_counter!=9)
 		{
@@ -101,7 +103,7 @@ public class TicTacToe
 			String tempPlayer=(player==1)?name1:name2;
 			tempPlayer=tempPlayer.toUpperCase();
 			System.out.println("\n\n\t"+tempPlayer);
-			System.out.print(ANSI_CYAN+"\tINPUT:\t"+ANSI_RESET);
+			System.out.print(ANSI_CYAN+"\t"+i18n.getString("INPUT")+"\t"+ANSI_RESET);
 			isValid = false;
 			do {
 				input=br.readLine();
@@ -114,28 +116,28 @@ public class TicTacToe
 						if(winnerCheck())
 						{
 							printGame();
-							System.out.println("\n\n\t\t"+tempPlayer+" Wins");
+							System.out.println("\n\n\t\t"+tempPlayer+i18n.getString("WINS"));
 							System.exit(0);
 						}
 						player=(player==1)?2:1;
 						chance_counter++;
 						isValid = true;
 					} else {
-						System.out.println("\tInvalid Position.\n\tPosition Doesn't Exist or is Already Occupied.");
-						System.out.println("\n\t"+ANSI_YELLOW+"Enter Position Eg- 1 2 (For 1st Row, 2nd Column)"+ANSI_RESET);
-						System.out.print(ANSI_CYAN+"\tINPUT:\t"+ANSI_RESET);
+						System.out.println("\t"+i18n.getString("INVALID_POS"));
+						System.out.println("\n\t"+ANSI_YELLOW+i18n.getString("ENTER_POSITION")+ANSI_RESET);
+						System.out.print(ANSI_CYAN+"\t"+i18n.getString("INPUT")+"\t"+ANSI_RESET);
 					}
 				} else {
-					System.out.print(ANSI_RED+"\tInput format is not valid.\n\t");
-					System.out.println("\n\t"+ANSI_YELLOW+"Enter Position Eg- 1 2 (For 1st Row, 2nd Column)"+ANSI_RESET);
-					System.out.print(ANSI_CYAN+"\tINPUT:\t"+ANSI_RESET);
+					System.out.print(ANSI_RED+"\t"+i18n.getString("INVALID_FORMAT")+"\n\t");
+					System.out.println("\n\t"+ANSI_YELLOW+i18n.getString("ENTER_POSITION")+ANSI_RESET);
+					System.out.print(ANSI_CYAN+"\t"+i18n.getString("INPUT")+"\t"+ANSI_RESET);
 				}
 			} while (!isValid);
 		}
 		if(chance_counter==9)
 		{
 			printGame();
-			System.out.println("\n\n\tGAME IS DRAW!!!");
+			System.out.println("\n\n\t"+i18n.getString("DRAW"));
 		}
 	}
 
