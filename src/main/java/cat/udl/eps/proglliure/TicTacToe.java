@@ -6,14 +6,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ResourceBundle;
-import java.util.Scanner;
 
 public class TicTacToe
 {
 	static char game [][];
 	static int chance_counter,winner;
-	static Scanner sc = new Scanner(System.in);
-	static ResourceBundle i18n = ResourceBundle.getBundle("translations");
+	static final ResourceBundle i18n = ResourceBundle.getBundle("translations");
 
 	public static final String ANSI_RESET = "\u001B[0m";
 	public static final String ANSI_BLACK = "\u001B[30m";
